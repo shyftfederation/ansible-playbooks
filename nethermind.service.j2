@@ -1,0 +1,14 @@
+[Unit]
+Description=Nethermind Ethereum Daemon
+After=network.target
+
+[Service]
+User={{ nethermind_service_user }}
+WorkingDirectory={{ nethermind_location }}
+ExecStart={{ nethermind_location}}/Nethermind.Runner -c {{ nethermind_location }}/nethermind.cfg
+Restart=on-failure
+LimitNOFILE=1000000
+
+[Install]
+WantedBy=default.target
+

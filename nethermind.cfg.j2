@@ -1,0 +1,66 @@
+{
+		"Init": {
+				{% if sealer_key %}
+						"IsMining": true,
+				{% else %}
+						"IsMining": false,
+				{% endif %}
+				"WebSocketsEnabled": true,
+				"StoreReceipts" : true,
+				"EnableUnsecuredDevWallet": false,
+				"ChainSpecPath": "{{ nethermind_location }}/chainspec.json",
+				"BaseDbPath": "{{ nethermind_location }}/db",
+				"LogFileName": "{{ nethermind_location }}/nethermind.log",
+				"StaticNodesPath": "{{ nethermind_location }}/static-nodes.json",
+				"DiscoveryEnabled": true,
+				"PeerManagerEnabled": true
+		},
+		"Network": {
+				"DiscoveryPort": 30303,
+				"P2PPort": 30303,
+				"OnlyStaticPeers": false,
+				"StaticPeers": null,
+		},
+		"JsonRpc": {
+				"Enabled": true
+						,"Host": "{{ nethermind_jsonrpc_ip }}"
+						,"Port": "{{ nethermind_jsonrpc_port }}"
+						,"EnabledModules": {{ nethermind_modules }}
+		},
+		"HealthChecks": {
+				"Enabled": true,
+				"UIEnabled": false,
+				"PollingInterval": 10,
+				"Slug": "/health"
+		},
+		'Metrics': {
+				{% if metrics_host %}
+						'Enabled': true,
+						'PushGatewayUrl': '{{ metrics_host }}',
+						'NodeName': '{{ ethstats_name }}'
+				{% else %}
+						'Enabled': false,
+				{% endif %}
+				
+		},
+
+		"Aura": {
+				"ForceSealing": false
+		},
+
+		"Pruning": {
+				"Enabled": {{ "true" if pruning else "false" }}
+		},
+
+		"EthStats": {
+				{% if ethstats_api %}
+						"Enabled": true
+						,"Server": "{{ ethstats_api }}"
+						,"Secret": "{{ ethstats_passwd }}"
+						,"Name": "{{ ethstats_name }}"
+						,"Contact": "{{ ethstats_contact }}"
+				{% else %}
+						"Enabled": false
+				{% endif %}
+		}
+}

@@ -1,0 +1,69 @@
+---
+  - name: Play 
+    hosts: all
+    become: yes
+    become_user: root
+    tasks:
+
+      - name: Cow gives your fortune in motd ;)
+        ansible.builtin.shell: /usr/games/fortune | /usr/games/cowsay > /etc/motd
+        args:
+            executable: /bin/bash
+
+      - name: Set cow ownership
+        ansible.builtin.file:
+          path: "/etc/motd"
+          state: file
+          mode: u=rwx,g=r,o=r
+
+      - name: Create database directory
+        ansible.builtin.file: 
+          path: "{{ nethermind_location }}/db"
+          state: directory
+          mode: '0755'
+
+      - name: Download and unarchive Nethermind
+        ansible.builtin.unarchive:
+          src: "{{ nethermind_zip }}"
+          dest: "{{ nethermind_location }}"
+
+      - name: Clear out chainspec, Data, config
+        ansible.builtin.raw: "rm -rf {{ nethermind_location }}/config && rm -rf {{ nethermind_location }}/chainspec && rm -rf {{ nethermind_location }}/Data"
+
+      - name: Create Nethermind static-nodes
+        ansible.builtin.template:
+          src: "./chains/{{ use_chain }}/static-nodes.json"
+          dest: "{{ nethermind_location}}/static-nodes.json"
+  
+      - name: Create Nethermind config 
+        ansible.builtin.template:
+          src: "./nethermind.cfg.j2"
+          dest: "{{ nethermind_location }}/nethermind.cfg"
+
+      - name: Create Nethermind chainspec.json 
+        ansible.builtin.template:
+          src: "./chains/{{ use_chain }}/chainspec.json"
+          dest: "{{ nethermind_location }}/chainspec.json"
+      
+      - name: Create nethermind.service
+        ansible.builtin.template:
+          src: "./nethermind.service.j2"
+          dest: "/etc/systemd/system/nethermind.service"
+
+      - name: Set Nethermind ownership
+        ansible.builtin.file:
+          path: "{{ nethermind_location }}"
+          state: directory
+          mode: 0700
+          owner: "{{ nethermind_service_user }}"
+          recurse: yes
+
+      - name: Enable and start Nethermind
+        ansible.builtin.systemd:
+          name: nethermind.service
+          daemon_reload: yes
+          enabled: yes
+          masked: no
+          state: restarted
+
+...

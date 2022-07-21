@@ -1,0 +1,27 @@
+vstestnet:
+  vars:
+      metrics_host: http://tndz.shyftnetwork.org:9091/metrics 
+      ethstats_api: wss://fedstats.veriscope.network/api
+      ethstats_passwd: Oogongi4
+      nethermind_location: /opt/nm/
+      nethermind_service_user: ubuntu
+      use_chain: veriscope_testnet
+      nethermind_jsonrpc_port: 64739
+      nethermind_jsonrpc_ip: 0.0.0.0
+      nethermind_modules: '["Admin", "Net", "Subscribe", "Parity", "TxPool", "Eth", "Trace", "Web3" ]'
+      nethermind_zip: nethermind-linux-amd64.zip
+      sealer_key: false
+      pruning: false
+
+  hosts:
+    172.31.34.55:
+      ethstats_name: testnet2
+      ethstats_contact: svantastic
+      sealer_key: fd4229de02c382b1dd935d58c51535cc244edf7951060eedf1063b6c3268bac2
+      pruning: true
+
+
+
+
+
+
