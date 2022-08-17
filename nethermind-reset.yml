@@ -1,0 +1,18 @@
+---
+  - name: Play 
+    hosts: all
+    become: yes
+    become_user: root
+    tasks:
+      - name: Stop nethermind
+        ansible.builtin.systemd:
+          name: nethermind.service
+          daemon_reload: yes
+          enabled: no
+          masked: no
+          state: stopped
+
+      - name: Clear  database directory
+        ansible.builtin.raw: "rm -rf {{ nethermind_location }}/db {{ nethermind_location }}/plugins {{ nethermind_location }}/logs {{ nethermind_location }}/*.*"
+
+...

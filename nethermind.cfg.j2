@@ -27,6 +27,16 @@
 						,"Port": "{{ nethermind_jsonrpc_port }}"
 						,"EnabledModules": {{ nethermind_modules }}
 		},
+
+		{% if sealer_key %}
+			"Keystore": {
+				"KeyStoreDirectory": "{{ nethermind_location }}/keystore/",
+				"PasswordFiles": "{{ nethermind_location }}/keystore/passwd",
+				"UnlockAccounts": [ "{{ sealer_account }}" ],
+				"BlockAuthorAccount": "{{ sealer_account }}"
+			},
+ 		{% endif %}
+
 		"HealthChecks": {
 				"Enabled": true,
 				"UIEnabled": false,
@@ -45,7 +55,7 @@
 		},
 
 		"Aura": {
-				"ForceSealing": false
+				"ForceSealing": true
 		},
 
 		"Pruning": {
