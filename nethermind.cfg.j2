@@ -43,13 +43,13 @@
 				"PollingInterval": 10,
 				"Slug": "/health"
 		},
-		'Metrics': {
+		"Metrics": {
 				{% if metrics_host %}
-						'Enabled': true,
-						'PushGatewayUrl': '{{ metrics_host }}',
-						'NodeName': '{{ ethstats_name }}'
+						"Enabled": true,
+						"PushGatewayUrl": "{{ metrics_host }}",
+						"NodeName": "{{ ethstats_name }}"
 				{% else %}
-						'Enabled': false,
+						"Enabled": false,
 				{% endif %}
 				
 		},

@@ -14,7 +14,7 @@
                        "0" : {
                            "list": ["0x73eAafA19D0b40d909D3E570Dfd56f3219Ba3F31"]
                        },
-                       "100": {
+                       "60": {
                            "safeContract": "0xe3523f868d1149082ef91f88ca1dd1a540de277b"
                        }
                    }
@@ -23,7 +23,7 @@
                "blockRewardContractTransition": "0x0",  
                "blockRewardContractTransitions": {
                    "0":       "0x000000000000000000000000000000073410f33D",
-                   "100":     "0x997286cfee9b5b4e34060da1d5a4ce4f94027d14"
+                   "60":     "0x997286cfee9b5b4e34060da1d5a4ce4f94027d14"
                },
                "randomnessContractCode": {
                    "0": "0x0000000000000000000000000000000000000042"
