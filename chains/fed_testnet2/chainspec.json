@@ -14,7 +14,7 @@
                        "0" : {
                            "list": ["0x73eAafA19D0b40d909D3E570Dfd56f3219Ba3F31"]
                        },
-                       "60": {
+                       "100": {
                            "safeContract": "0xe3523f868d1149082ef91f88ca1dd1a540de277b"
                        }
                    }
@@ -23,7 +23,7 @@
                "blockRewardContractTransition": "0x0",  
                "blockRewardContractTransitions": {
                    "0":       "0x000000000000000000000000000000073410f33D",
-                   "60":     "0x997286cfee9b5b4e34060da1d5a4ce4f94027d14"
+                   "100":     "0x997286cfee9b5b4e34060da1d5a4ce4f94027d14"
                },
                "randomnessContractCode": {
                    "0": "0x0000000000000000000000000000000000000042"
@@ -35,10 +35,37 @@
        }
    },
    "params": {
-       "gasLimitBoundDivisor": "0x400",
-       "maximumExtraDataSize": "0x20",
-       "minGasLimit": "0x663BE0",  
-       "networkID": "0x3CAD"
+       "networkID": "0x3CAD",
+           "eip140Transition": "0",
+    "eip145Transition": "0",
+    "eip150Transition": "0",
+    "eip155Transition": "0",
+    "eip160Transition": "0",
+    "eip161abcTransition": "0",
+    "eip161dTransition": "0",
+    "eip211Transition": "0",
+    "eip214Transition": "0",
+    "eip658Transition": "0",
+    "eip1014Transition": "0",
+    "eip1052Transition": "0",
+    "eip1283Transition": "0",
+    "eip1283DisableTransition": "0",
+    "eip152Transition": "0",
+    "eip1108Transition": "0",
+    "eip1344Transition": "0",
+    "eip1884Transition": "0",
+    "eip2028Transition": "0",
+    "eip2200Transition": "0",
+    "eip2565Transition": "0",
+    "eip2929Transition": "0",
+    "eip2930Transition": "0",
+    "eip1559Transition": "0",
+    "eip3198Transition": "0",
+    "eip3529Transition": "0",
+    "eip3541Transition": "0",
+    "gasLimitBoundDivisor": "0x400",
+    "minGasLimit": "0x1388",
+    "maximumExtraDataSize": "0xffff"
    },
    "genesis": {
        "seal": {    
