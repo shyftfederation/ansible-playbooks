@@ -5,17 +5,6 @@
     become_user: root
     tasks:
 
-      - name: Cow gives your fortune in motd ;)
-        ansible.builtin.shell: /usr/games/fortune | /usr/games/cowsay > /etc/motd
-        args:
-            executable: /bin/bash
-
-      - name: Set cow ownership
-        ansible.builtin.file:
-          path: "/etc/motd"
-          state: file
-          mode: u=rwx,g=r,o=r
-
       - name: Create database directory
         ansible.builtin.file: 
           path: "{{ nethermind_location }}/db"
