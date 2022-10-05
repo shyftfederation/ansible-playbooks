@@ -1,41 +1,52 @@
 ---
-  - name: Play 
-    hosts: all
+  - name: Deploy/upgrade nethermind 
+    hosts: netherminds
     become: yes
     become_user: root
     tasks:
+      - name: Install packages 
+        ansible.builtin.apt:
+          pkg:
+          - librocksdb5.17
+          - nginx
 
       - name: Create database directory
-        ansible.builtin.file: 
+        file: 
           path: "{{ nethermind_location }}/db"
           state: directory
           mode: '0755'
 
+      - name: transfer nethermind
+        copy:
+          src: "{{ nethermind_zip }}"
+          dest: "/tmp/nethermind.zip"
+
       - name: Download and unarchive Nethermind
         ansible.builtin.unarchive:
-          src: "{{ nethermind_zip }}"
+          src: "/tmp/nethermind.zip"
+          remote_src: yes
           dest: "{{ nethermind_location }}"
 
       - name: Clear out chainspec, Data, config
-        ansible.builtin.raw: "rm -rf {{ nethermind_location }}/config && rm -rf {{ nethermind_location }}/chainspec && rm -rf {{ nethermind_location }}/Data"
+        shell: "rm -rf {{ nethermind_location }}/config && rm -rf {{ nethermind_location }}/Data"
 
       - name: Create Nethermind static-nodes
-        ansible.builtin.template:
+        template:
           src: "./chains/{{ use_chain }}/static-nodes.json"
           dest: "{{ nethermind_location}}/static-nodes.json"
   
       - name: Create Nethermind config 
-        ansible.builtin.template:
+        template:
           src: "./nethermind.cfg.j2"
           dest: "{{ nethermind_location }}/nethermind.cfg"
 
       - name: Create Nethermind chainspec.json 
-        ansible.builtin.template:
+        template:
           src: "./chains/{{ use_chain }}/chainspec.json"
           dest: "{{ nethermind_location }}/chainspec.json"
       
       - name: Create nethermind.service
-        ansible.builtin.template:
+        template:
           src: "./nethermind.service.j2"
           dest: "/etc/systemd/system/nethermind.service"
 
@@ -48,7 +59,7 @@
           recurse: yes
 
       - name: Enable and start Nethermind
-        ansible.builtin.systemd:
+        systemd:
           name: nethermind.service
           daemon_reload: yes
           enabled: yes
