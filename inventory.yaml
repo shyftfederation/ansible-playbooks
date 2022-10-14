@@ -3,9 +3,6 @@ netherminds:
   children:
     fed_testnet:
       vars:
-          metrics_host: http://tndz.shyft.corp:9091/metrics 
-          fqdn_aka: rpc.testnet.shyft.network
-          ssl_cert: rpc.testnet.shyft.network
           ethstats_api: ws://stats.testnet.shyft.network:80/api
           ethstats_passwd: Ey9liezi
           nethermind_location: /opt/nm/
