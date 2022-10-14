@@ -1,6 +1,6 @@
 {
 "Init": {
-{% if sealer_key %}
+{% if sealer_keyfile %}
 	"IsMining": true,
 {% else %}
 	"IsMining": false,
@@ -29,7 +29,7 @@
 		,"Port": "{{ nethermind_jsonrpc_port }}"
 },
 
-{% if sealer_key %}
+{% if sealer_keyfile %}
 "Keystore": {
 	"KeyStoreDirectory": "{{ nethermind_location }}/keystore/",
 	"PasswordFiles": "{{ nethermind_location }}/keystore/passwd",

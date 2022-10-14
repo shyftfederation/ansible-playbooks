@@ -50,6 +50,22 @@
           src: "./nethermind.service.j2"
           dest: "/etc/systemd/system/nethermind.service"
 
+      - name: copy keyfile (maybe)
+        copy: src="{{ sealer_keyfile }}" dest="{{ nethermind_location }}/keystore/"
+        when: sealer_keyfile != ""
+
+      - name: remove keyfile password
+        when: sealer_keyfile != ""
+        file: path="{{ nethermind_location}}/keystore/passwd" state=absent
+
+      - name: deploy keyfile password
+        when: sealer_keyfile != ""
+        lineinfile:
+          path: "{{ nethermind_location }}/keystore/passwd"
+          line: "{{ keystore_passwd }}"
+          create: yes
+          state: present
+
       - name: Set Nethermind ownership
         ansible.builtin.file:
           path: "{{ nethermind_location }}"
@@ -67,3 +83,5 @@
           state: restarted
 
 ...
+
+

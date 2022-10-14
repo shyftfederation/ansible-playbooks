@@ -1,5 +1,5 @@
 {
-   "name": "Shyft Testnet 2", 
+   "name": "Shyft Testnet 3", 
    "engine": {
        "authorityRound": { 
            "params": {
@@ -12,10 +12,10 @@
                "validators": {
                    "multi": {
                        "0" : {
-                           "list": ["0x73eAafA19D0b40d909D3E570Dfd56f3219Ba3F31"]
+                           "list": ["0x5870Da349B692d0f123b414ba1847c51E3bF3Ef6"]
                        },
-                       "100": {
-                           "safeContract": "0xe3523f868d1149082ef91f88ca1dd1a540de277b"
+                       "95": {
+                           "safeContract": "0x06ae2c92c103f349ebbc2b854abbc56c528ef944"
                        }
                    }
                },
@@ -23,7 +23,7 @@
                "blockRewardContractTransition": "0x0",  
                "blockRewardContractTransitions": {
                    "0":       "0x000000000000000000000000000000073410f33D",
-                   "100":     "0x997286cfee9b5b4e34060da1d5a4ce4f94027d14"
+                   "100":     "0x97058963955b8ce62410306775e1cd9988db48ea"
                },
                "randomnessContractCode": {
                    "0": "0x0000000000000000000000000000000000000042"
@@ -121,13 +121,17 @@
 	   "constructor": "6080604052348015600f57600080fd5b5060908061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c80637877a79714602d575b600080fd5b60336049565b6040518082815260200191505060405180910390f35b6000806302625a009050809150509056fea2646970667358221220a5547d44bf8b2f01765b4050dd4963271df5d61ac818d62315a120d94bdc50a664736f6c63430007010033"
        }, 
 
-       "0x73eAafA19D0b40d909D3E570Dfd56f3219Ba3F31": {
-           "reason": "seed money for PVT_SEALER in setup scripts",
+       "0x5870Da349B692d0f123b414ba1847c51E3bF3Ef6": {
+           "reason": "ADDR_FUNDING",
+           "balance": "322982495000000000000000000"
+       }, 
+       "0x5870Da349B692d0f123b414ba1847c51E3bF3Ef6": {
+           "reason": "seed money for ADDR_SEALER in setup scripts",
            "balance": "322982495000000000000000000"
        }, 
 
-       "0xEB67f758ECcd41f28E7293366070e74Bb338441e": {
-                   "reason": "testnet moneybags",
+       "0x113388D04731B5268C32FAaB4212eF2655a01528": {
+           "reason": "testnet faucet",
            "balance": "32298249500000000000000000000"
        }
    }
