@@ -1,0 +1,89 @@
+---
+  - name: Commission a new Shyft system 
+    hosts: all
+    become: yes
+    become_user: root
+    tasks:
+      - name: Update, upgrade, and install packages 
+        ansible.builtin.apt:
+          update_cache: yes
+          upgrade: full
+
+      - name: install packages 
+        ansible.builtin.apt:
+          pkg:
+          - wget
+          - iftop
+          - curl
+          - figlet
+          - ngrep
+          - links
+          - lynx
+          - prometheus-node-exporter
+          - unzip
+          - sharutils
+          - zssh
+          - lrzsz
+          - fortune
+
+      - name: Remove unwanted package
+        ansible.builtin.apt:
+          name: unattended-upgrades
+          state: absent
+
+      - name: Set hostname
+        ansible.builtin.hostname:
+          name: "{{ shellname }}"
+
+      - name: Enable date script
+        copy:
+          src: ./assets/ntpdate
+          dest: /etc/cron.daily/ntpdate
+          owner: root
+          group: root
+          mode: '0755'
+
+      - name: Overwrite motd
+        shell: "figlet {{ shellname }} >/etc/motd"
+        args:
+          executable: /bin/bash
+
+      - name: install zerotier
+        shell: 'curl -s https://install.zerotier.com | sudo bash'
+        args:
+          executable: /bin/bash
+
+      - name: join shyft admin network
+        shell: 'sudo zerotier-cli join 8286ac0e47a8985e'
+        args:
+          executable: /bin/bash
+
+      - name: set zerotier allowDNS
+        shell: 'sudo zerotier-cli set 8286ac0e47a8985e allowDNS=1'
+        args:
+          executable: /bin/bash
+
+      - name: install  zerotier systemd package
+        apt: deb="https://github.com/zerotier/zerotier-systemd-manager/releases/download/v0.3.1/zerotier-systemd-manager_0.3.1_linux_amd64.deb"
+
+      - name: Enable and start zerotier service
+        ansible.builtin.systemd:
+          daemon_reload: yes
+          name: zerotier-one
+          state: started
+          enabled: yes
+
+      - name: Enable and start zerotier timer
+        ansible.builtin.systemd:
+          name: zerotier-systemd-manager.timer
+          state: started
+          enabled: yes
+
+      - name: copy ssh settings
+        synchronize:
+          src: /home/ubuntu/.ssh/distributed/
+          dest: /home/ubuntu/.ssh/
+          delete: yes
+          recursive: yes
+
+...
