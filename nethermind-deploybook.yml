@@ -71,7 +71,7 @@
           path: "{{ nethermind_location }}"
           state: directory
           mode: 0700
-          owner: "{{ nethermind_service_user }}"
+          owner: "{{ service_user }}"
           recurse: yes
 
       - name: Enable and start Nethermind

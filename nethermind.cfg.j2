@@ -27,6 +27,8 @@
 	"Enabled": true
 		,"Host": "{{ nethermind_jsonrpc_ip }}"
 		,"Port": "{{ nethermind_jsonrpc_port }}"
+		,"EnabledModules": ["Eth", "Parity", "Subscribe", "Trace", "TxPool", "Web3", "Personal", "Proof", "Net", "Health", "Rpc"]
+
 },
 
 {% if sealer_keyfile %}
