@@ -62,7 +62,7 @@
         when: sealer_keyfile != ""
         lineinfile:
           path: "{{ nethermind_location }}/keystore/passwd"
-          line: "{{ keystore_passwd }}"
+          line: "{{ sealer_keyfile_passwd }}"
           create: yes
           state: present
 
