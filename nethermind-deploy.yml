@@ -31,7 +31,7 @@
           dest: "{{ nethermind_location }}"
 
       - name: Clear out chainspec, Data, config
-        shell: "rm -rf {{ nethermind_location }}/config && rm -rf {{ nethermind_location }}/Data"
+        shell: "rm -rf {{ nethermind_location }}/config {{ nethermind_location }}/Data {{ nethermind_location }}/db/peers/SimpleFileDb.db {{ nethermind_location }}/db/SimpleFileDb.db"
 
       - name: Create Nethermind static-nodes
         template:
