@@ -15,7 +15,7 @@ This has been tested with:
 
 After the playbook completes, Nethermind should successfully start and the machine appear on https://stats.testnet.shyft.network/ .
 
-You can shut down Nethermind and clear off database and executables with # `ansible-playbook  -i inventory.yml  nethermind-reset.yml`
+You can shut down Nethermind and clear off database and executables with ```ansible-playbook  -i inventory.yml  nethermind-reset.yml```
 
 The playbook supports a number of extra features. Review the playbook and the config file templates to understand them.
 - deploying sealer keys and passwords
