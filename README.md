@@ -1,16 +1,16 @@
 ## Compatibility
 
 This has been tested with:
-# Debian 11, Ubuntu 20.04 and Ubuntu 22.04 hosts
-# Nethermind 1.15 and 1.16.  Lower versions have a mildly different configuration file format
+1. Debian 11, Ubuntu 20.04 and Ubuntu 22.04 hosts
+2. Nethermind 1.15 and 1.16.  Lower versions have a mildly different configuration file format
 
 ## Quick launch a nethermind node
 
-# Create an instance or set up a compatible machine.  Set up the instance or/and your local SSH config so that you can just `ssh machine_ip sudo echo hello` successfully
-# Fetch a platform-appropriate Nethermind release zipfile from [the Github releases page](https://github.com/nethermindEth/nethermind/releases). Example: `wget https://github.com/NethermindEth/nethermind/releases/download/1.16.1/nethermind-1.16.1-644fe89f-linux-x64.zip`
-# Rename the file to something simple, such as nethermind-1.16-x64.zip`
-# Revise the included inventory.yml to refer to your machine IP as the target host and the nethermind zipfile.
-# `ansible-playbook  -i inventory.yml  nethermind-deploy.yml`
+1. Create an instance or set up a compatible machine.  Set up the instance or/and your local SSH config so that you can just `ssh machine_ip sudo echo hello` successfully
+2. Fetch a platform-appropriate Nethermind release zipfile from [the Github releases page](https://github.com/nethermindEth/nethermind/releases). Example: `wget https://github.com/NethermindEth/nethermind/releases/download/1.16.1/nethermind-1.16.1-644fe89f-linux-x64.zip`
+3. Rename the file to something simple, such as nethermind-1.16-x64.zip`
+4. Revise the included inventory.yml to refer to your machine IP as the target host and the nethermind zipfile.
+5. `ansible-playbook  -i inventory.yml  nethermind-deploy.yml`
 
 
 After the playbook completes, Nethermind should successfully start and the machine appear on https://stats.testnet.shyft.network/ .
