@@ -55,14 +55,14 @@
 
       - name: copy keyfile (maybe)
         copy: src="{{ sealer_keyfile }}" dest="{{ nethermind_location }}/keystore/"
-        when: sealer_keyfile 
+        when: sealer_keyfile != false
 
       - name: remove keyfile password
-        when: sealer_keyfile 
+        when: sealer_keyfile != false
         file: path="{{ nethermind_location}}/keystore/passwd" state=absent
 
       - name: deploy keyfile password
-        when: sealer_keyfile 
+        when: sealer_keyfile != false
         lineinfile:
           path: "{{ nethermind_location }}/keystore/passwd"
           line: "{{ sealer_keyfile_passwd }}"

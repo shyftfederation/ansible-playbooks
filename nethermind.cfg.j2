@@ -31,7 +31,7 @@
 
 },
 
-{% if sealer_keyfile %}
+{% if sealer_keyfile != false %}
 "Keystore": {
 	"KeyStoreDirectory": "{{ nethermind_location }}/keystore/",
 	"PasswordFiles": "{{ nethermind_location }}/keystore/passwd",
@@ -48,7 +48,7 @@
 },
 
 "Metrics": {
-{% if metrics_host %}
+{% if metrics_host != false %}
 	"Enabled": true,
 	"PushGatewayUrl": "{{ metrics_host }}",
 	"NodeName": "{{ ethstats_name }}"
@@ -68,7 +68,7 @@
 },
 
 "EthStats": {
-{% if ethstats_api %}
+{% if ethstats_api != false %}
 	"Enabled": true
 		,"Server": "{{ ethstats_api }}"
 		,"Secret": "{{ ethstats_passwd }}"
