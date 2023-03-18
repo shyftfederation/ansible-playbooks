@@ -1,0 +1,21 @@
+
+netherminds:
+  children:
+    fed_testnet:
+      vars:
+          ethstats_api: ws://stats.testnet.shyft.network:80/api
+          ethstats_passwd: Ey9liezi
+          nethermind_location: /opt/nm/
+          service_user: ubuntu
+          use_chain: fed_testnet
+          nethermind_jsonrpc_port: 64739
+          nethermind_jsonrpc_ip: 0.0.0.0
+
+      hosts:
+        localhost:
+          ethstats_name: vagrant
+          ethstats_contact: "0xSealer-Address-Here"
+          sealer_account: "0xSealer-Address-Here"
+          sealer_key: "sealer-pkey-here"
+          nethermind_zip: nethermind-1.16.zip
+
