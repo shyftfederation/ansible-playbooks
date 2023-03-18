@@ -54,15 +54,15 @@
           dest: "/etc/systemd/system/nethermind.service"
 
       - name: copy keyfile (maybe)
+        when: sealer_keyfile is defined and sealer_keyfile
         copy: src="{{ sealer_keyfile }}" dest="{{ nethermind_location }}/keystore/"
-        when: sealer_keyfile != false
 
       - name: remove keyfile password
-        when: sealer_keyfile != false
+        when: sealer_keyfile is defined and sealer_keyfile
         file: path="{{ nethermind_location}}/keystore/passwd" state=absent
 
       - name: deploy keyfile password
-        when: sealer_keyfile != false
+        when: sealer_keyfile is defined and sealer_keyfile
         lineinfile:
           path: "{{ nethermind_location }}/keystore/passwd"
           line: "{{ sealer_keyfile_passwd }}"

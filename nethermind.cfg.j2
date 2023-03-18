@@ -1,6 +1,6 @@
 {
 "Init": {
-{% if sealer_keyfile %}
+{% if (sealer_keyfile is defined and sealer_keyfile) or (sealer_key is defined and sealer_key) %}
 	"IsMining": true,
 {% else %}
 	"IsMining": false,
@@ -31,7 +31,13 @@
 
 },
 
-{% if sealer_keyfile != false %}
+{% if sealer_key is defined and sealer_key %}
+"Keystore": {
+	"TestNodeKey": "{{ sealer_key }}"
+},
+{% endif %}
+
+{% if sealer_keyfile is defined and sealer_keyfile %}
 "Keystore": {
 	"KeyStoreDirectory": "{{ nethermind_location }}/keystore/",
 	"PasswordFiles": "{{ nethermind_location }}/keystore/passwd",
@@ -48,7 +54,7 @@
 },
 
 "Metrics": {
-{% if metrics_host != false %}
+{% if metrics_host is defined and metrics_host %}
 	"Enabled": true,
 	"PushGatewayUrl": "{{ metrics_host }}",
 	"NodeName": "{{ ethstats_name }}"
@@ -64,11 +70,11 @@
 },
 
 "Pruning": {
-	"Mode": "{{ "Hybrid" if pruning else "None" }}"
+	"Mode": "{{ "Hybrid" if (pruning is defined and pruning) else "None" }}"
 },
 
 "EthStats": {
-{% if ethstats_api != false %}
+{% if ethstats_api is defined and ethstats_api %}
 	"Enabled": true
 		,"Server": "{{ ethstats_api }}"
 		,"Secret": "{{ ethstats_passwd }}"
