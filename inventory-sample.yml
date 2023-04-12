@@ -17,7 +17,6 @@ netherminds:
         somerelay.local:
           ethstats_name: vagrant
           ethstats_contact: "enode://...@2.2.2.2:30303"
-          nethermind_zip: nethermind-1.16.zip
 
         somesealer.local:
           ethstats_name: vagrant2
