@@ -8,14 +8,21 @@ netherminds:
           nethermind_location: /opt/nm/
           service_user: ubuntu
           use_chain: fed_testnet
+          nethermind_zip: nethermind-1.16.zip
           nethermind_jsonrpc_port: 64739
           nethermind_jsonrpc_ip: 0.0.0.0
+#         metrics_host: http://prometheus-pushgateway:9091/metrics
 
       hosts:
-        localhost:
+        somerelay.local:
           ethstats_name: vagrant
           ethstats_contact: "0xSealer-Address-Here"
-          sealer_account: "0xSealer-Address-Here"
-          sealer_key: "sealer-pkey-here"
           nethermind_zip: nethermind-1.16.zip
+
+        somesealer.local:
+          ethstats_name: vagrant2
+          ethstats_contact: "enode://...@1.1.1.1:30303"
+          sealer_keyfile: assets/key-ACCOUNT.json
+          sealer_keyfile_passwd: "unset"
+          sealer_account: "0xACCOUNT"
 
