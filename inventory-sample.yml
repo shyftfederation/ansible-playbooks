@@ -10,17 +10,14 @@ netherminds:
           use_chain: fed_testnet
           nethermind_zip: nethermind-1.16.zip
           nethermind_jsonrpc_port: 64739
-          nethermind_jsonrpc_ip: 0.0.0.0
 #         metrics_host: http://prometheus-pushgateway:9091/metrics
 
       hosts:
         somerelay.local:
           ethstats_name: vagrant
-          ethstats_contact: "enode://...@2.2.2.2:30303"
 
         somesealer.local:
           ethstats_name: vagrant2
-          ethstats_contact: "enode://...@1.1.1.1:30303"
           sealer_keyfile: assets/key-ACCOUNT.json
           sealer_keyfile_passwd: "unset"
           sealer_account: "0xACCOUNT"

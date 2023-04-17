@@ -25,9 +25,8 @@
 
 "JsonRpc": {
 	"Enabled": true
-		,"Host": "{{ nethermind_jsonrpc_ip }}"
+		,"Host": "0.0.0.0"
 		,"Port": "{{ nethermind_jsonrpc_port }}"
-		,"EnabledModules": ["Eth", "Parity", "Subscribe", "Trace", "TxPool", "Web3", "Personal", "Proof", "Net", "Health", "Rpc"]
 
 },
 
@@ -79,7 +78,7 @@
 		,"Server": "{{ ethstats_api }}"
 		,"Secret": "{{ ethstats_passwd }}"
 		,"Name": "{{ ethstats_name }}"
-		,"Contact": "{{ ethstats_contact }}"
+		,"Contact": "unset"
 {% else %}
 	"Enabled": false
 {% endif %}

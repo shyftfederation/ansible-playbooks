@@ -8,62 +8,76 @@
         ansible.builtin.apt:
           pkg:
           - libsnappy-dev 
+          - moreutils
           - libc6-dev 
           - libc6 
           - unzip 
           - nginx
 
       - name: Create database directory
-        file: 
+        ansible.builtin.file: 
           path: "{{ nethermind_location }}/db"
           state: directory
           mode: '0755'
 
       - name: transfer nethermind
-        copy:
+        ansible.builtin.copy:
           src: "{{ nethermind_zip }}"
           dest: "/tmp/nethermind.zip"
 
       - name: Download and unarchive Nethermind
         ansible.builtin.unarchive:
-          src: "/tmp/nethermind.zip"
+          src: /tmp/nethermind.zip
           remote_src: yes
           dest: "{{ nethermind_location }}"
 
       - name: Clear out chainspec, Data, config
-        shell: "rm -rf {{ nethermind_location }}/config {{ nethermind_location }}/Data {{ nethermind_location }}/db/peers/SimpleFileDb.db {{ nethermind_location }}/db/SimpleFileDb.db"
+        shell: rm -rf {{ nethermind_location }}/config {{ nethermind_location }}/Data {{ nethermind_location }}/db/peers/SimpleFileDb.db {{ nethermind_location }}/db/SimpleFileDb.db
 
-      - name: Create Nethermind static-nodes
-        template:
-          src: "./chains/{{ use_chain }}/static-nodes.json"
-          dest: "{{ nethermind_location}}/static-nodes.json"
-  
+      - name: Copy get-enodes script to remote
+        ansible.builtin.copy:
+          src: assets/get-enodes.sh
+          dest: /tmp/get-enodes.sh
+          mode: '0755'
+
+      - name: Execute get-enodes script and store result
+        shell: /tmp/get-enodes.sh {{ shyft_ethstats_url }} > {{ nethermind_location }}/static-nodes.json
+        when: shyft_ethstats_url is defined 
+
+      - name: Download & verify genesis file
+        ansible.builtin.get_url:
+          url: "{{ shyft_chainspec_url }}"
+          dest: "{{ nethermind_location }}/chainspec.json"
+          checksum: "sha256:{{ shyft_chainspec_sha256 }}"
+        when: shyft_chainspec is defined and shyft_chainspec_sha256 is defined
+
+      - name: Download genesis file
+        ansible.builtin.get_url:
+          url: "{{ shyft_chainspec_url }}"
+          dest: "{{ nethermind_location }}/chainspec.json"
+        when: shyft_chainspec is defined and shyft_chainspec_sha256 is not defined
+
       - name: Create Nethermind config 
-        template:
+        ansible.builtin.template:
           src: "./nethermind.cfg.j2"
           dest: "{{ nethermind_location }}/nethermind.cfg"
-
-      - name: Create Nethermind chainspec.json 
-        template:
-          src: "./chains/{{ use_chain }}/chainspec.json"
-          dest: "{{ nethermind_location }}/chainspec.json"
       
       - name: Create nethermind.service
-        template:
+        ansible.builtin.template:
           src: "./nethermind.service.j2"
           dest: "/etc/systemd/system/nethermind.service"
 
       - name: copy keyfile (maybe)
+        ansible.builtin.copy: src="{{ sealer_keyfile }}" dest="{{ nethermind_location }}/keystore/"
         when: sealer_keyfile is defined and sealer_keyfile
-        copy: src="{{ sealer_keyfile }}" dest="{{ nethermind_location }}/keystore/"
 
       - name: remove keyfile password
-        when: sealer_keyfile is defined and sealer_keyfile
-        file: path="{{ nethermind_location}}/keystore/passwd" state=absent
+        ansible.builtin.file: path="{{ nethermind_location}}/keystore/passwd" state=absent
+        when: sealer_keyfile is not defined or not sealer_keyfile
 
       - name: deploy keyfile password
         when: sealer_keyfile is defined and sealer_keyfile
-        lineinfile:
+        ansible.builtin.lineinfile:
           path: "{{ nethermind_location }}/keystore/passwd"
           line: "{{ sealer_keyfile_passwd }}"
           create: yes
@@ -78,13 +92,46 @@
           recurse: yes
 
       - name: Enable and start Nethermind
-        systemd:
+        ansible.builtin.systemd:
           name: nethermind.service
           daemon_reload: yes
           enabled: yes
           masked: no
           state: restarted
 
+      - name: Allow Nethermind to start
+        ansible.builtin.pause:
+          seconds: 15
+
+      - name: Get local enode
+        ansible.builtin.uri:
+          url: http://localhost:{{ nethermind_jsonrpc_port }}/
+          method: POST
+          headers:
+            Content-Type: application/json
+          body: {"jsonrpc":"2.0","method":"net_localEnode","params":[],"id":1}
+          body_format: json
+          return_content: true
+        register: local_enode
+
+      - name: Extract result from jsonrpc
+        shell: echo "{{ local_enode.json }}" | tr "'" '"' | jq .result | tr -d '"'
+        register: local_enode_result
+
+      - name: Overwrite ethstats contact field
+        shell: jq '.EthStats.Contact = "{{ local_enode_result.stdout | trim }}"' {{ nethermind_location }}/nethermind.cfg | sponge {{ nethermind_location }}/nethermind.cfg
+      
+      - name: Set Nethermind ownership (again)
+        ansible.builtin.file:
+          path: "{{ nethermind_location }}"
+          state: directory
+          mode: 0700
+          owner: "{{ service_user }}"
+          recurse: yes
+
+      - name: Enable and start Nethermind again
+        ansible.builtin.systemd:
+          name: nethermind.service
+          state: restarted
+
 ...
-
-
