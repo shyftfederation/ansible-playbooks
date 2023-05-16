@@ -49,13 +49,13 @@
           url: "{{ shyft_chainspec_url }}"
           dest: "{{ nethermind_location }}/chainspec.json"
           checksum: "sha256:{{ shyft_chainspec_sha256 }}"
-        when: shyft_chainspec is defined and shyft_chainspec_sha256 is defined
+        when: shyft_chainspec_url is defined and shyft_chainspec_sha256 is defined
 
       - name: Download genesis file
         ansible.builtin.get_url:
           url: "{{ shyft_chainspec_url }}"
           dest: "{{ nethermind_location }}/chainspec.json"
-        when: shyft_chainspec is defined and shyft_chainspec_sha256 is not defined
+        when: shyft_chainspec_url is defined and shyft_chainspec_sha256 is not defined
 
       - name: Create Nethermind config 
         ansible.builtin.template:
