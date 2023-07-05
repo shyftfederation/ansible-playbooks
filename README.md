@@ -2,7 +2,7 @@
 
 This has been tested with:
 1. Debian 11, Ubuntu 20.04 and Ubuntu 22.04 hosts
-2. Nethermind 1.15 and 1.16.  Lower versions have a mildly different configuration file format
+2. Nethermind 1.15 and 1.16.  Lower versions have a mildly different configuration file format.
 
 ## Quick launch a nethermind node
 
@@ -25,7 +25,7 @@ The playbook supports a number of extra features. Review the playbook and the co
 
 ## Establishing an RPC
 
-If you would like nginx to server as an http/https reverse proxy to this instance, drop a file in `/etc/nginx/sites-enabled` kind of like this:
+If you would like nginx to serve as an http/https reverse proxy to this instance, drop a file in `/etc/nginx/sites-enabled/` like this:
 
 ```
 server {

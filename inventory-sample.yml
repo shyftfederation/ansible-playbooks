@@ -10,6 +10,7 @@ netherminds:
           use_chain: fed_testnet
           nethermind_zip: nethermind-1.16.zip
           nethermind_jsonrpc_port: 64739
+          shyft_chainspec_url: https://spec.shyft.network/ShyftTestnet-current.json
 #         metrics_host: http://prometheus-pushgateway:9091/metrics
 
       hosts:
