@@ -12,7 +12,13 @@
           masked: no
           state: stopped
 
+      - name: Clear out chainspec, Data, config
+        shell: rm -rf {{ nethermind_location }}/config {{ nethermind_location }}/db {{ nethermind_location }}/plugins {{ nethermind_location }}/db/peers/SimpleFileDb.db {{ nethermind_location }}/db/SimpleFileDb.db
+
+
       - name: Clear database directory, plugs, logs, executables
-        ansible.builtin.raw: "rm -rf {{ nethermind_location }}/db {{ nethermind_location }}/plugins {{ nethermind_location }}/logs {{ nethermind_location }}/*.*"
+        shell: 
+          cmd: rm -rf db plugins logs Neth*
+          chdir: "{{ nethermind_location }}"
 
 ...
