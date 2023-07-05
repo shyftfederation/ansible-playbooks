@@ -9,6 +9,7 @@ fi
 
 URL="{{ shyft_chainspec_url }}"
 LOCATION="{{ nethermind_location }}/chainspec.json"
+SERVICE_USER="{{ service_user }}"
 
 TEMP_FILE=$(mktemp)
 curl -s -o $TEMP_FILE $URL
@@ -21,8 +22,9 @@ if [ $(stat -c%s "$TEMP_FILE") -ge 5120 ]; then
     if cat $TEMP_FILE | jq . > /dev/null 2>&1; then
         # Compare the temporary file to the existing file
         if ! cmp -s $TEMP_FILE $LOCATION; then
-            echo "Files are different. Restarting service."
+            echo "Files are different. New chainspec installed. Restarting service."
             cp $TEMP_FILE $LOCATION
+	    chown $SERVICE_USER $LOCATION
             systemctl restart nethermind
         else
             echo "Files are identical. Doing nothing."
