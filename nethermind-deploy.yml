@@ -62,12 +62,12 @@
 
       - name: Create Nethermind config 
         ansible.builtin.template:
-          src: "./nethermind.cfg.j2"
+          src: "assets/nethermind.cfg.j2"
           dest: "{{ nethermind_location }}/nethermind.cfg"
       
       - name: Create nethermind.service
         ansible.builtin.template:
-          src: "./nethermind.service.j2"
+          src: "assets/nethermind.service.j2"
           dest: "/etc/systemd/system/nethermind.service"
 
       - name: copy nethermind log config
