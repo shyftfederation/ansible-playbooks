@@ -1,24 +1,23 @@
 ---
-  - name: Deploy/upgrade nethermind 
+  - name: Deploy/upgrade nethermind
     hosts: netherminds
     become: yes
     become_user: root
     tasks:
-      - name: Install packages 
+      - name: Install packages
         ansible.builtin.apt:
           pkg:
-          - libsnappy-dev 
+          - libsnappy-dev
           - moreutils
-          - node-ws
-          - libc6-dev 
-          - libc6 
-          - unzip 
+          - libc6-dev
+          - libc6
+          - unzip
           - nginx
           - ntpdate
           - jq
 
       - name: Create database directory
-        ansible.builtin.file: 
+        ansible.builtin.file:
           path: "{{ nethermind_location }}/db"
           state: directory
           mode: '0755'
@@ -37,34 +36,39 @@
       - name: Clear out chainspec, Data, config
         shell: rm -rf {{ nethermind_location }}/config {{ nethermind_location }}/Data {{ nethermind_location }}/db/peers/SimpleFileDb.db {{ nethermind_location }}/db/SimpleFileDb.db
 
-      - name: Copy get-enodes script to remote
-        ansible.builtin.copy:
-          src: assets/get-enodes.sh
-          dest: /tmp/get-enodes.sh
-          mode: '0755'
-        when: shyft_ethstats_url is defined 
-
-      - name: Execute get-enodes script and store result
-        shell: /tmp/get-enodes.sh {{ shyft_ethstats_url }} > {{ nethermind_location }}/static-nodes.json
-        when: shyft_ethstats_url is defined 
-
-      - name: Upload bootnodes
-        ansible.builtin.template:
-          src: "{{ shyft_staticnodes_file }}"
-          dest: "{{ nethermind_location}}/static-nodes.json"
-        when: shyft_ethstats_url is not defined 
 
       - name: Download genesis file
         ansible.builtin.get_url:
           url: "{{ shyft_chainspec_url }}"
           dest: "{{ nethermind_location }}/chainspec.json"
-        when: shyft_chainspec_url is defined 
+        when: shyft_chainspec_url is defined
 
-      - name: Create Nethermind config 
+
+      - name: Download static nodes file
+        ansible.builtin.get_url:
+          url: "{{ shyft_static_nodes_url }}"
+          dest: "{{ nethermind_location }}/static-nodes.json"
+        when: shyft_static_nodes_url is defined
+
+
+      - name: Copy get-enodes script to remote
+        ansible.builtin.copy:
+          src: assets/get-enodes.sh
+          dest: /tmp/get-enodes.sh
+          mode: '0755'
+        when: shyft_ethstats_url is defined
+
+      - name: Execute get-enodes script and store result
+        shell: /tmp/get-enodes.sh {{ shyft_ethstats_url }} > {{ nethermind_location }}/static-nodes.json
+        when: shyft_ethstats_url is defined
+
+
+
+      - name: Create Nethermind config
         ansible.builtin.template:
           src: "assets/nethermind.cfg.j2"
           dest: "{{ nethermind_location }}/nethermind.cfg"
-      
+
       - name: Create nethermind.service
         ansible.builtin.template:
           src: "assets/nethermind.service.j2"
@@ -107,7 +111,7 @@
 
       - name: Allow Nethermind to start
         ansible.builtin.pause:
-          seconds: 15
+          seconds: 30
 
       - name: Get local enode
         ansible.builtin.uri:
@@ -126,7 +130,7 @@
 
       - name: Overwrite ethstats contact field
         shell: jq '.EthStats.Contact = "{{ local_enode_result.stdout | trim }}"' {{ nethermind_location }}/nethermind.cfg | sponge {{ nethermind_location }}/nethermind.cfg
-      
+
       - name: Set Nethermind ownership (again)
         ansible.builtin.file:
           path: "{{ nethermind_location }}"
@@ -144,10 +148,11 @@
         ansible.builtin.template:
           src: "assets/check-chainspec-update.j2"
           dest: "/etc/cron.weekly/chainspec-update"
-        when: shyft_chainspec_url is defined 
+        when: shyft_chainspec_url is defined
 
       - name: Set up ntpdate
         ansible.builtin.template:
           src: "assets/ntpdate"
           dest: "/etc/cron.daily/ntpdate"
 ...
+
