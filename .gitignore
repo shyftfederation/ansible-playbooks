@@ -1,2 +1,6 @@
 inventory.yml
+assets/key*
+*.zip
+package-lock.json
+
 
