@@ -2,29 +2,46 @@
 
 set -e
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
+if [ "$EUID" -ne 0 ]; then
+  echo "Please run as root"
+  exit 2
 fi
 
-URL="{{ shyft_chainspec_url }}"
-LOCATION="{{ nethermind_location }}/chainspec.json"
+> URL="{{ shyft_chainspec_url }}"
+
 SERVICE_USER="{{ service_user }}"
+CHAINSPEC_FILE="{{ nethermind_location }}/chainspec.json"
+if [ ! -f "$CHAINSPEC_FILE" ]; then
+    echo "$CHAINSPEC_FILE does not exist. Exiting."
+    exit 1
+fi
+
+CHAINSPEC_URL="{{ shyft_chainspec_url}}"
+if [ -z "$CHAINSPEC_URL" ]; then
+    echo "CHAINSPEC_URL not provided. Exiting."
+    exit 1
+fi
+
+if ! command -v jq >/dev/null ; then
+    echo "jq not found. please install it"
+    exit 1
+fi
+
 
 TEMP_FILE=$(mktemp)
-curl -s -o $TEMP_FILE $URL
+curl -s -o $TEMP_FILE $CHAINSPEC_URL
 
-echo "Comparing $URL to $LOCATION"
+echo "Comparing $CHAINSPEC_URL to $CHAINSPEC_FILE"
 
 # Check if the file size is at least 5kb
-if [ $(stat -c%s "$TEMP_FILE") -ge 5120 ]; then
+if [ $(stat -f%z "$TEMP_FILE") -ge 5120 ]; then
     # Check if the file is a valid JSON
     if cat $TEMP_FILE | jq . > /dev/null 2>&1; then
         # Compare the temporary file to the existing file
-        if ! cmp -s $TEMP_FILE $LOCATION; then
+        if ! cmp -s $TEMP_FILE $CHAINSPEC_FILE; then
             echo "Files are different. New chainspec installed. Restarting service."
-            cp $TEMP_FILE $LOCATION
-	    chown $SERVICE_USER $LOCATION
+            cp $TEMP_FILE $CHAINSPEC_FILE
+            chown $SERVICE_USER $CHAINSPEC_FILE
             systemctl restart nethermind
         else
             echo "Files are identical. Doing nothing."
@@ -37,4 +54,5 @@ else
 fi
 
 rm $TEMP_FILE
+
 
