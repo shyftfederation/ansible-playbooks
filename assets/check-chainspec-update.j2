@@ -7,8 +7,6 @@ if [ "$EUID" -ne 0 ]; then
   exit 2
 fi
 
-> URL="{{ shyft_chainspec_url }}"
-
 SERVICE_USER="{{ service_user }}"
 CHAINSPEC_FILE="{{ nethermind_location }}/chainspec.json"
 if [ ! -f "$CHAINSPEC_FILE" ]; then
@@ -34,7 +32,7 @@ curl -s -o $TEMP_FILE $CHAINSPEC_URL
 echo "Comparing $CHAINSPEC_URL to $CHAINSPEC_FILE"
 
 # Check if the file size is at least 5kb
-if [ $(stat -f%z "$TEMP_FILE") -ge 5120 ]; then
+if [ $(wc -c < "$TEMP_FILE") -ge 5120 ]; then
     # Check if the file is a valid JSON
     if cat $TEMP_FILE | jq . > /dev/null 2>&1; then
         # Compare the temporary file to the existing file
