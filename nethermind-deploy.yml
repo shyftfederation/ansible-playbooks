@@ -113,9 +113,26 @@
         ansible.builtin.pause:
           seconds: 30
 
+      - name: Set up chainspec updates
+        ansible.builtin.template:
+          src: "assets/check-chainspec-update.j2"
+          dest: "/usr/sbin/chainspec-update"
+          mode: 4755
+        when: shyft_chainspec_url is defined
+
+      - name: Delete a file
+        file:
+          path: /etc/cron.weekly/chainspec-update
+          state: absent
+
+      - name: Set up ntpdate
+        ansible.builtin.template:
+          src: "assets/ntpdate"
+          dest: "/etc/cron.daily/ntpdate"
+      
       - name: Get local enode
         ansible.builtin.uri:
-          url: http://localhost:{{ nethermind_jsonrpc_port }}/
+          url: http://localhost:{{nethermind_jsonrpc_port }}/
           method: POST
           headers:
             Content-Type: application/json
@@ -144,15 +161,5 @@
           name: nethermind.service
           state: restarted
 
-      - name: Set up chainspec updates
-        ansible.builtin.template:
-          src: "assets/check-chainspec-update.j2"
-          dest: "/etc/cron.weekly/chainspec-update"
-        when: shyft_chainspec_url is defined
-
-      - name: Set up ntpdate
-        ansible.builtin.template:
-          src: "assets/ntpdate"
-          dest: "/etc/cron.daily/ntpdate"
 ...
 
