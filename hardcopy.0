@@ -1,0 +1,34 @@
+-rw-rw-r-- 1 shyftops ops    0 Apr 18  2023 __init__.py
+-rw-rw-r-- 1 shyftops ops  505 Apr 18  2023 admin.py
+-rw-rw-r-- 1 shyftops ops 1147 Apr 18  2023 auth.py
+-rw-rw-r-- 1 shyftops ops 1338 Apr 18  2023 celery.py
+-rw-rw-r-- 1 shyftops ops  198 Apr 18  2023 ethereum.py
+-rw-rw-r-- 1 shyftops ops 1879 Apr 18  2023 loggers.py
+-rw-rw-r-- 1 shyftops ops  168 Apr 18  2023 redis.py
+-rw-rw-r-- 1 shyftops ops 1684 Apr 18  2023 serializers.py
+-rw-rw-r-- 1 shyftops ops 3064 Apr 18  2023 tasks.py
+drwxrwsr-x 2 shyftops ops 4096 Apr 18  2023 tests
+-rw-rw-r-- 1 shyftops ops 2144 Apr 18  2023 utils.py
+
+./trash/safe-transaction-service/safe_transaction_service/utils/tests:
+total 8
+-rw-rw-r-- 1 shyftops ops    0 Apr 18  2023 __init__.py
+-rw-rw-r-- 1 shyftops ops 1470 Apr 18  2023 test_loggers.py
+-rw-rw-r-- 1 shyftops ops  990 Apr 18  2023 test_tasks.py
+
+./trash/safe-transaction-service/scripts:
+total 12
+-rw-rw-r-- 1 shyftops ops  234 Apr 18  2023 autodeploy.sh
+-rw-rw-r-- 1 shyftops ops 1431 Apr 18  2023 benchmark_keccak.py
+-rw-rw-r-- 1 shyftops ops  810 Apr 18  2023 benchmark_node.py
+
+./uptime:
+total 16
+drwxrwsr-x 2 shyftops ops 4096 Apr 17  2023 rpc
+-rw-rw-r-- 1 shyftops ops 1263 Apr 17  2023 template.j2
+-rwxrwxr-x 1 shyftops ops 4777 Apr 17  2023 uptime-query.py
+
+./uptime/rpc:
+total 8
+-rw-rw-r-- 1 shyftops ops 5971 Apr 17  2023 index.html
+shyftops@tndz:/opt/infra$
